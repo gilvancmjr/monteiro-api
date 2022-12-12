@@ -1,61 +1,47 @@
 package com.monteiroapi;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import org.junit.jupiter.api.Assertions;
+import org.hamcrest.Matchers;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpStatus;
 
-import com.monteiroapi.api.dto.VendaDto;
-import com.monteiroapi.api.form.VendaForm;
-import com.monteiroapi.domain.exception.EntidadeNaoEncontradaException;
-import com.monteiroapi.domain.service.VendaService;
+import com.monteiroapi.util.ResourceUtils;
+
+import io.restassured.RestAssured;
+import io.restassured.http.ContentType;
 
 @SpringBootTest
 class VendaTests {
 
-	@Autowired
-	private VendaService vendaService;
+	private String form;
 
-	@Test
-	public void deveConsultaComSucessoPorVendedoresComMaiorVendaNoMes() {
+	private String formEntidadeNaoEncontrada;
 
-		List<String> nomes = new ArrayList<>();
-		nomes.add("Ana Silva");
-		nomes.add("João Mendes");
-		VendaForm vendaForm = new VendaForm();
-		vendaForm.setNomes(nomes);
-		vendaForm.setPeriodo("12/2021");
-		VendaDto vendaDto;
+	@BeforeEach
+	public void setUp() {
+		RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
 
-		vendaDto = vendaService.encontrarMaiorValorVendido(vendaForm);
-
-		assertThat(vendaDto.getNome()).isNotNull();
-		assertThat(vendaDto.getPeriodo()).isNotNull();
-		assertThat(vendaDto.getValor()).isNotNull();
+		form = ResourceUtils.getContentFromResource("/json/correto/venda-form.json");
+		formEntidadeNaoEncontrada = ResourceUtils
+				.getContentFromResource("/json/incorreto/venda-form-funcionario-sem-venda.json");
 
 	}
 
 	@Test
-	public void deveFalharQuandoConsultaPorVendedoresSemDadosNoBanco() {
+	public void deveRetornarSucesso_QuandoBuscarVendedorComMaiorValorVendido() {
 
-		List<String> nomes = new ArrayList<>();
-		nomes.add("Gilvan Junior");
+		RestAssured.given().basePath("/vendas").port(8080).body(form).accept(ContentType.JSON)
+				.contentType(ContentType.JSON).when().post().then().statusCode(200);
 
-		VendaForm vendaForm = new VendaForm();
-		vendaForm.setNomes(nomes);
-		vendaForm.setPeriodo("12/2021");
+	}
 
-		EntidadeNaoEncontradaException erroEsperado = Assertions.assertThrows(EntidadeNaoEncontradaException.class,
-				() -> {
-					vendaService.encontrarMaiorValorVendido(vendaForm);
-				});
+	@Test
+	public void deveRetornar404_QuandoBuscarVendedorComMaiorValorVendido() {
 
-		assertThat(erroEsperado).isNotNull();
+		RestAssured.given().basePath("/vendas").port(8080).body(formEntidadeNaoEncontrada).accept(ContentType.JSON)
+				.contentType(ContentType.JSON).when().post().then().statusCode(HttpStatus.NOT_FOUND.value())
+				.body("titulo", Matchers.equalTo("Recurso não encontrado"));
 
 	}
 

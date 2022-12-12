@@ -1,6 +1,7 @@
 package com.monteiroapi.api.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,19 +14,19 @@ import com.monteiroapi.domain.service.VendaService;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping(value = "/vendas")
+@RequestMapping(value = "/vendas", consumes = "application/json")
 public class VendaController {
 
 	@Autowired
 	private VendaService vendaService;
 
 	@PostMapping
-	public VendaDto consultaMaiorValorVendido(@RequestBody @Valid VendaForm vendaForm) {
+	public ResponseEntity<VendaDto> consultaMaiorValorVendido(@RequestBody @Valid VendaForm vendaForm) {
 
-		return vendaService.encontrarMaiorValorVendido(vendaForm);
+		VendaDto vendaDto = vendaService.encontrarMaiorValorVendido(vendaForm);
+
+		return ResponseEntity.ok(vendaDto);
 
 	}
-
-
 
 }

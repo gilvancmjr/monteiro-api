@@ -1,6 +1,7 @@
 package com.monteiroapi.api.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,29 +21,39 @@ public class FuncionarioController {
 	private FuncionarioService funcionarioService;
 
 	@PostMapping("/valor-total-pago-salario-beneficio")
-	public FuncionarioDto consultaValorTotalPagoSalarioBeneficio(@RequestBody @Valid FuncionarioForm funcionarioForm) {
-		return funcionarioService.calculaValorTotalPagoSalarioBeneficio(funcionarioForm);
+	public ResponseEntity<FuncionarioDto> consultaValorTotalPagoSalarioBeneficio(
+			@RequestBody @Valid FuncionarioForm funcionarioForm) {
+		FuncionarioDto funcionarioDto = funcionarioService.calculaValorTotalPagoSalarioBeneficio(funcionarioForm);
+		return ResponseEntity.ok(funcionarioDto);
 	}
 
 	@PostMapping("/valor-total-pago-salario")
-	public FuncionarioDto consultaValorTotalPagoSalario(@RequestBody @Valid FuncionarioForm funcionarioForm) {
-		return funcionarioService.calculaValorTotalPagoSalario(funcionarioForm);
+	public ResponseEntity<FuncionarioDto> consultaValorTotalPagoSalario(
+			@RequestBody @Valid FuncionarioForm funcionarioForm) {
+		FuncionarioDto funcionarioDto = funcionarioService.calculaValorTotalPagoSalario(funcionarioForm);
+		return ResponseEntity.ok(funcionarioDto);
 	}
 
 	@PostMapping("/valor-total-pago-beneficio")
-	public FuncionarioDto consultaValorTotalPagoBeneficio(@RequestBody @Valid FuncionarioForm funcionarioForm) {
-		return funcionarioService.calcularValorTotalPagoBeneficio(funcionarioForm);
+	public ResponseEntity<FuncionarioDto> consultaValorTotalPagoBeneficio(
+			@RequestBody @Valid FuncionarioForm funcionarioForm) {
+		FuncionarioDto funcionarioDto = funcionarioService.calcularValorTotalPagoBeneficio(funcionarioForm);
+		return ResponseEntity.ok(funcionarioDto);
 	}
 
 	@PostMapping("/maior-valor-total-pago-salario-beneficio")
-	public FuncionarioDto consultarMaiorValorTotalPagoSalarioBeneficio(
+	public ResponseEntity<FuncionarioDto> consultarMaiorValorTotalPagoSalarioBeneficio(
 			@RequestBody @Valid FuncionarioForm funcionarioForm) {
-		return funcionarioService.encontrarMaiorValorTotalPagoSalarioBeneficio(funcionarioForm);
+		FuncionarioDto funcionarioDto = funcionarioService
+				.encontrarMaiorValorTotalPagoSalarioBeneficio(funcionarioForm);
+		return ResponseEntity.ok(funcionarioDto);
 	}
 
 	@PostMapping("/nome-funcionario-valor-total-pago-salario-beneficio")
-	public FuncionarioDto consultarNomeDoFuncionarioValorTotalPagoBeneficio(
+	public ResponseEntity<FuncionarioDto> consultarNomeDoFuncionarioValorTotalPagoBeneficio(
 			@RequestBody @Valid FuncionarioForm funcionarioForm) {
-		return funcionarioService.encontrarNomeDoFuncionarioValorTotalPagoBeneficio(funcionarioForm);
+		FuncionarioDto funcionarioDto = funcionarioService
+				.encontrarNomeDoFuncionarioValorTotalPagoBeneficio(funcionarioForm);
+		return ResponseEntity.ok(funcionarioDto);
 	}
 }
