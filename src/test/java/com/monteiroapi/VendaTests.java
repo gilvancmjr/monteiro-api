@@ -13,6 +13,8 @@ import io.restassured.http.ContentType;
 
 @SpringBootTest
 class VendaTests {
+	
+	//Por ser um projeto simples, então foi criado apenas um banco e para realizar os teste será necessario a inicialização do projeto
 
 	private String form;
 

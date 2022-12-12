@@ -16,6 +16,8 @@ import jakarta.validation.Valid;
 @RestController
 @RequestMapping(value = "/funcionarios")
 public class FuncionarioController {
+	
+	//Não realizei as consultas com metodo Get pois acredito que Post fica mais facil de enteder que recebe um Body
 
 	@Autowired
 	private FuncionarioService funcionarioService;

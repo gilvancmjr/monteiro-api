@@ -16,6 +16,8 @@ import jakarta.validation.Valid;
 @RestController
 @RequestMapping(value = "/vendas", consumes = "application/json")
 public class VendaController {
+	
+	//Não realizei as consultas com metodo Get pois acredito que Post fica mais facil de enteder que recebe um Body
 
 	@Autowired
 	private VendaService vendaService;
