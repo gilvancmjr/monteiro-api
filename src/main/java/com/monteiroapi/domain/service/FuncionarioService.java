@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import com.monteiroapi.api.assembler.FuncionarioAssembler;
 import com.monteiroapi.api.dto.FuncionarioDto;
 import com.monteiroapi.api.form.FuncionarioForm;
-import com.monteiroapi.domain.exception.EntidadeNaoEncontradaException;
+import com.monteiroapi.domain.exception.FuncionarioNaoEncontradoException;
 import com.monteiroapi.domain.model.Funcionario;
 import com.monteiroapi.domain.model.Venda;
 import com.monteiroapi.domain.repository.FuncionarioRepository;
@@ -66,10 +66,7 @@ public class FuncionarioService {
 		for (String nome : funcionarioForm.getNomes()) {
 
 			funcionarios = buscarOuFalhar(nome);
-			if (funcionarios == null || funcionarios.isEmpty()) {
-				new EntidadeNaoEncontradaException(nome);
-			}
-
+			
 			valorTotal += getBeneficio(funcionarios, funcionarioForm);
 		}
 
@@ -171,7 +168,7 @@ public class FuncionarioService {
 		List<Funcionario> funcionarios;
 		funcionarios = funcionarioRepository.findFuncionarioByNome(nome);
 		if (funcionarios == null || funcionarios.isEmpty()) {
-			throw new EntidadeNaoEncontradaException(nome);
+			throw new FuncionarioNaoEncontradoException(nome);
 		}
 		return funcionarios;
 	}
