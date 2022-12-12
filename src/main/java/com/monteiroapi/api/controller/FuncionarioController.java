@@ -23,23 +23,26 @@ public class FuncionarioController {
 	public FuncionarioDto consultaValorTotalPagoSalarioBeneficio(@RequestBody @Valid FuncionarioForm funcionarioForm) {
 		return funcionarioService.calculaValorTotalPagoSalarioBeneficio(funcionarioForm);
 	}
-	
+
 	@PostMapping("/valor-total-pago-salario")
 	public FuncionarioDto consultaValorTotalPagoSalario(@RequestBody @Valid FuncionarioForm funcionarioForm) {
 		return funcionarioService.calculaValorTotalPagoSalario(funcionarioForm);
 	}
-	
+
 	@PostMapping("/valor-total-pago-beneficio")
 	public FuncionarioDto consultaValorTotalPagoBeneficio(@RequestBody @Valid FuncionarioForm funcionarioForm) {
 		return funcionarioService.calcularValorTotalPagoBeneficio(funcionarioForm);
 	}
-	
+
 	@PostMapping("/maior-valor-total-pago-salario-beneficio")
-	public FuncionarioDto consultarMaiorValorTotalPagoSalarioBeneficio(@RequestBody @Valid FuncionarioForm funcionarioForm) {
+	public FuncionarioDto consultarMaiorValorTotalPagoSalarioBeneficio(
+			@RequestBody @Valid FuncionarioForm funcionarioForm) {
 		return funcionarioService.encontrarMaiorValorTotalPagoSalarioBeneficio(funcionarioForm);
 	}
+
 	@PostMapping("/nome-funcionario-valor-total-pago-salario-beneficio")
-	public FuncionarioDto consultarNomeDoFuncionarioValorTotalPagoBeneficio(@RequestBody @Valid FuncionarioForm funcionarioForm) {
+	public FuncionarioDto consultarNomeDoFuncionarioValorTotalPagoBeneficio(
+			@RequestBody @Valid FuncionarioForm funcionarioForm) {
 		return funcionarioService.encontrarNomeDoFuncionarioValorTotalPagoBeneficio(funcionarioForm);
 	}
 }

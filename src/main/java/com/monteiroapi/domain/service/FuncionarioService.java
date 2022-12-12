@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.monteiroapi.api.assembler.FuncionarioAssembler;
 import com.monteiroapi.api.dto.FuncionarioDto;
 import com.monteiroapi.api.form.FuncionarioForm;
+import com.monteiroapi.domain.exception.EntidadeNaoEncontradaException;
 import com.monteiroapi.domain.model.Funcionario;
 import com.monteiroapi.domain.model.Venda;
 import com.monteiroapi.domain.repository.FuncionarioRepository;
@@ -34,12 +35,13 @@ public class FuncionarioService {
 
 		for (String nome : funcionarioForm.getNomes()) {
 
-			funcionarios = funcionarioRepository.findFuncionarioByNome(nome);
+			funcionarios = buscarOuFalhar(nome);
 			valorTotal += getSalario(funcionarios, funcionarioForm);
 			valorTotal += getBeneficio(funcionarios, funcionarioForm);
 		}
 
 		return funcionarioAssembler.toModel(valorTotal);
+
 	}
 
 	public FuncionarioDto calculaValorTotalPagoSalario(FuncionarioForm funcionarioForm) {
@@ -49,7 +51,7 @@ public class FuncionarioService {
 
 		for (String nome : funcionarioForm.getNomes()) {
 
-			funcionarios = funcionarioRepository.findFuncionarioByNome(nome);
+			funcionarios = buscarOuFalhar(nome);
 			valorTotal += getSalario(funcionarios, funcionarioForm);
 		}
 
@@ -63,11 +65,16 @@ public class FuncionarioService {
 
 		for (String nome : funcionarioForm.getNomes()) {
 
-			funcionarios = funcionarioRepository.findFuncionarioByNome(nome);
+			funcionarios = buscarOuFalhar(nome);
+			if (funcionarios == null || funcionarios.isEmpty()) {
+				new EntidadeNaoEncontradaException(nome);
+			}
+
 			valorTotal += getBeneficio(funcionarios, funcionarioForm);
 		}
 
 		return funcionarioAssembler.toModel(valorTotal);
+
 	}
 
 	public FuncionarioDto encontrarMaiorValorTotalPagoSalarioBeneficio(FuncionarioForm funcionarioForm) {
@@ -78,7 +85,7 @@ public class FuncionarioService {
 
 		for (String nome : funcionarioForm.getNomes()) {
 
-			funcionarios = funcionarioRepository.findFuncionarioByNome(nome);
+			funcionarios = buscarOuFalhar(nome);
 
 			Double valorTotal = getBeneficio(funcionarios, funcionarioForm) + getSalario(funcionarios, funcionarioForm);
 
@@ -99,7 +106,7 @@ public class FuncionarioService {
 
 		for (String nome : funcionarioForm.getNomes()) {
 
-			funcionarios = funcionarioRepository.findFuncionarioByNome(nome);
+			funcionarios = buscarOuFalhar(nome);
 			for (Funcionario funcionario : funcionarios) {
 				Double valorTotal = getBeneficio(funcionarios, funcionarioForm);
 				if (maiorValorTotal < valorTotal) {
@@ -158,6 +165,15 @@ public class FuncionarioService {
 
 		return salarioComBeneficio;
 
+	}
+
+	private List<Funcionario> buscarOuFalhar(String nome) {
+		List<Funcionario> funcionarios;
+		funcionarios = funcionarioRepository.findFuncionarioByNome(nome);
+		if (funcionarios == null || funcionarios.isEmpty()) {
+			throw new EntidadeNaoEncontradaException(nome);
+		}
+		return funcionarios;
 	}
 
 }
