@@ -23,5 +23,4 @@ public class Venda {
 	
 	private Double valorVenda;
 	
-
 }
